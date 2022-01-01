@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+
+  client:
+    container_name: react-tutorial-client
+    image: node:8
+    expose:
+    - "3000"
+    tty: true
+    ports:
+      - "3000:3000"
+    working_dir: /client
+    volumes:
+      - ./client:/client
+    entrypoint: bash
+
+  server:
+    container_name: react-tutorial-server
+    image: suhel.jupyterlab:1.0
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    ports:
+      - "8888:8888"
+    volumes: 
+      - ./server:/server
+    entrypoint: jupyter lab --allow-root --port=8888 --ServerApp.token=kebob --notebook-dir=/server 

@@ -1,0 +1,1 @@
+This project was bootstrapped with [Frontend-Boilerplate-React-Redux-](https://github.com/RyanAngJY/Frontend-Boilerplate-React-Redux-)
