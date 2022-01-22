@@ -7,6 +7,11 @@ import Main from "./Main";
 
 const store = configureStore();
 
+// I need a container/component that displays random strings
+// I should create a new container and display component
+// Maybe I should model this off the MessageList container
+// First I should understand how that works
+
 const App = () => (
   <Provider store={store}>
     <Router>

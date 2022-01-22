@@ -7,7 +7,8 @@ export function apiCall(method, path, data) {
         return resolve(res.data);
       })
       .catch(err => {
-        return reject(err.response.data.error);
+        console.error(err)
+        // return reject(err.response.data.error);
       });
   });
 }

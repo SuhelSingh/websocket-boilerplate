@@ -5,8 +5,6 @@ services:
   client:
     container_name: react-tutorial-client
     image: node:8
-    expose:
-    - "3000"
     tty: true
     ports:
       - "3000:3000"
@@ -23,7 +21,9 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DB
     ports:
-      - "8888:8888"
+      - "8888:8888" # for developing in jupyterlab
+      - "5000:5000" # for accessing the server
     volumes: 
       - ./server:/server
-    entrypoint: jupyter lab --allow-root --port=8888 --ServerApp.token=kebob --notebook-dir=/server 
+
+    entrypoint: jupyter lab --allow-root --port=8888 --ServerApp.token=kebob --notebook-dir="/server"

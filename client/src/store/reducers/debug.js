@@ -1,12 +1,12 @@
 import { LOAD_DEBUG } from "../actionTypes";
 
-const message = (state = [], action) => {
+const debug = (state = null, action) => {
   switch (action.type) {
     case LOAD_DEBUG:
-      return [...action.debug_obj];
+      return action.debug_obj;
     default:
       return state;
   }
 };
 
-export default message;
+export default debug;
