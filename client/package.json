@@ -3,23 +3,31 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "@blueprintjs/core": "^3.52.0",
+    "axios": "^0.25.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.21.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "react-moment": "^0.7.0",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.1",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "^2.0.0",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "socket.io-client": "^4.4.1"
   },
-  "proxy": "http://localhost:8087",
+  "proxy": "http://localhost:3000/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

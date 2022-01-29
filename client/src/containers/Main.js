@@ -1,17 +1,24 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MessageList from "../components/MessageList";
-import DebugDiv from "../components/DebugDiv";
+import Debug from "./Debug";
+import Estimate from "./Estimate";
+import InspectSockets from "./InspectSockets";
 import Landing from "../components/Landing";
+import styles from './Main.module.css';
+
 
 const Main = props => {
+
   return (
-    <div className="container">
-      <Switch>
-        <Route path="/debug" component={DebugDiv} />
-        <Route path="/messages" component={MessageList} />
-        <Route path="/" component={Landing} />
-      </Switch>
+    <div className={styles.main}>
+      <Routes>
+        <Route path="/debug" element={<Debug/>} />
+        <Route path="/messages" element={<MessageList/>} />
+        <Route path="/estimate" element={<Estimate/>} />
+        <Route path="/inspect_sockets" element={<InspectSockets/>} />
+        <Route path="/" element={<Landing/>} />
+      </Routes>
     </div>
   );
 };

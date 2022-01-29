@@ -1,29 +1,25 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { fetchMessages } from "../store/actions/messages";
 
-class MessageList extends Component {
-  componentDidMount() {
-    this.props.fetchMessages();
-  }
+const MessageList = props => {
 
-  render() {
-    const { messages } = this.props;
-    console.log(messages)
-    let messageList = messages.map(m => (
-      <div key={m._id}>
-        {m.name}
-      </div>
-    ));
+  useEffect(() => {props.fetchMessages()},[]);
+  
+  let messageList = (props.messages).map(m => (
+    <div key={m._id}>
+      {m.name}
+    </div>
+  ));
 
-    return (
-      <div>
-        <h1>Messages:</h1>
-        {messageList}
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1>Messages:</h1>
+      {messageList}
+    </div>
+  );
 }
+
 
 function mapStateToProps(state) {
   return {

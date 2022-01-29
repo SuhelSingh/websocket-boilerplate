@@ -1,0 +1,52 @@
+.main {
+    width: 100%;
+    height: 100%;  
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-center;
+    align-items: center;
+} 
+
+.divider_div {
+    height: 5vh
+}
+
+.card {
+    width: 50%;
+    max-width: 650px;
+    /* min-height: 250px; */
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+}
+.panel {
+    width: 100%;
+}
+
+.title {
+    font-weight:bold;
+    color: #0E5A8A;
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.body {
+    width: 100%;
+    flex-grow: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text_input {
+    min-width: 150px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

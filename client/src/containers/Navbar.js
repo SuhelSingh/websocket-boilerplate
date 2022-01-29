@@ -1,25 +1,24 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Logo from "../images/warbler-logo.png";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Alignment, Navbar, Button } from "@blueprintjs/core";
 
-class Navbar extends Component {
-  render() {
-    return (
-      <nav className="navbar navbar-expand">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <Link to="/" className="navbar-brand">
-              <img src={Logo} alt="Warbler Home" />
-              Landing
-            </Link>
-            <Link to="/messages" className="navbar-brand">
-              Messages
-            </Link>
-          </div>
-        </div>
-      </nav>
+const MyNavbar = props => {
+
+  const navigate = useNavigate();
+
+  return (
+        <Navbar>
+        <Navbar.Group align={Alignment.LEFT}>
+            <Navbar.Heading>Suhel's Website</Navbar.Heading>
+            <Navbar.Divider />
+            <Button className="bp3-minimal" icon="home" text="Home" onClick={() => { navigate('/')} }/>
+            <Button className="bp3-minimal" text="Messages" onClick={() => { navigate('/messages')}}/>
+            <Button className="bp3-minimal" text="Estimate" onClick={() => { navigate('/estimate')}}/>
+            <Button className="bp3-minimal" text="Debug" onClick={() => { navigate('/debug')}}/>
+            <Button className="bp3-minimal" text="Inspect Sockets" onClick={() => { navigate('/inspect_sockets')}}/>
+        </Navbar.Group>
+        </Navbar>
     );
   }
-}
 
-export default Navbar;
+export default MyNavbar;
