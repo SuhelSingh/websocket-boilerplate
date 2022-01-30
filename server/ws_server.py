@@ -4,7 +4,7 @@ import pandas as pd
 
 from flask import Flask, render_template
 from flask_cors import CORS, cross_origin
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
 CORS(app)
@@ -35,6 +35,23 @@ def handle_message(data):
 @socketio.on('json')
 def handle_json(json):
     print('received json: ' + str(json))
+    
+@socketio.on('test')
+def handle_test(payload=None):
+    print('received text: ' + str(payload))
+    print(type(payload))
+    
+@socketio.on('echo_action')
+def echo_action(payload=None):
+    print('Echo-ing action. Payload content:')
+    print(payload)
+    emit('send_action',payload)
+    
+@socketio.on('echo_log')
+def echo_action(payload=None):
+    print('Echo-ing log. Payload content:')
+    print(payload)
+    emit('log',payload)
     
 @socketio.on('connect')
 def handle_connect(payload=None):

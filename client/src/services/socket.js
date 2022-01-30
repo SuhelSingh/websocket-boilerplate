@@ -29,6 +29,7 @@ const create_socket = (host, path, name, dispatch) => {
 
   // Add functions
   const emit_json = (event_name, json_payload) => {
+    console.log(`Emitted event. Name: ${event_name}, Payload: ${json_payload}`)
     socket.emit(event_name, json_payload)
   }
 

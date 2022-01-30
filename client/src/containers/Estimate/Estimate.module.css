@@ -42,11 +42,34 @@
     justify-content: center;
 }
 
-.text_input {
-    min-width: 150px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+
+
+.typography_style {
+    font-size: 24px !important;
+
+}
+
+.no_margin_divider {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
 }
 
 
+.hflex_container {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+} 
+
+.vflex_container {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: right;
+    gap: 15px;
+} 
 

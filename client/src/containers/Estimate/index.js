@@ -13,13 +13,21 @@ const EstimationPrompt = props => {
       <div className={styles.divider_div}></div>
       
       <Card interactive={true} elevation={Elevation.TWO} className={styles.card}>
-          <h1 className={styles.title} >Estimation Practice</h1>
-          <Divider/>
+          <h5 className={styles.title} >Estimation Practice</h5>
+          <Divider className={styles.no_margin_divider}/>
           <div className={styles.body}> 
-            <div>
-                <h3>{n1} x {n2}</h3>
-                <div style={{marginBottom: "10px"}}></div>
-                <NumericInput large={true} buttonPosition="none" intent="primary" allowNumericCharactersOnly={true}/>
+            <div className={styles.vflex_container}>
+            <div sytles='margin-bottom:20px'></div>
+              <div className={styles.hflex_container}>
+                <div className={'bp3-text-large'}>{n1} x {n2} = </div>
+                <NumericInput
+                  large={true}
+                  buttonPosition="none"
+                  intent="primary"
+                  allowNumericCharactersOnly={true}
+                  className={styles.typography_style}
+                />
+              </div>
             </div>
           </div>
       </Card>

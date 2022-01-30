@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormGroup, Card, Elevation, InputGroup, Button, Tab, Tabs, Text } from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/popover2" 
+import CodeEditor from '@uiw/react-textarea-code-editor';
 import styles from './inspectSockets.module.css'
-import {
-//  registerSocket, 
-  addSocket, 
-//  removeSocket
-} from "../../store/actions/sockets"
+import { addSocket, removeSocket } from "../../store/actions/sockets"
 
 
 const LayoutContainer = props => {
@@ -49,6 +47,9 @@ const DictToTable = props => {
   )
 }
 
+
+
+
 const AddSocketPanel = props => {
     
     const [socketName, setSocketName] = useState("default_socket");
@@ -84,6 +85,67 @@ const AddSocketPanel = props => {
         </Card>
     )
   }
+
+const SocketControls = props => {
+  // requires ws as a websocket input
+
+  const dispatch = useDispatch()
+  const [eventName, setEventName] = useState("")
+  const [code, setCode] = useState("")
+
+  const emitToBackend = () => {
+    props.ws.functions.emit_json(eventName, code)
+  }
+
+  const EmitEventPopover = (
+    <Card>
+      <div className={styles.emit_event_popover}>
+        <h5>Emit Event to Backend</h5>
+        <InputGroup 
+          id="event-name-input" 
+          placeholder='Event Name' 
+          value={eventName} 
+          onChange={(e)=>{setEventName(e.target.value)}}
+        />
+        <CodeEditor
+          value={code}
+          language="js"
+          placeholder="Event Payload (in javascript)"
+          onChange={(e) => setCode(e.target.value)}
+          padding={15}
+          style={{
+            fontSize: 12,
+            backgroundColor: "#f5f5f5",
+            fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+          }}
+        />
+        <Button text='Emit Event' onClick={emitToBackend} />
+      </div>
+    </Card>
+  )
+
+  return (
+    <div>
+      <h5>{'Button Controls'}</h5>
+      <div className={styles.hflex_container}>
+        <Button text='Remove Socket' onClick={()=>{dispatch(removeSocket(props.ws.name))}}/>
+        <Button text='Log Socket' onClick={()=>{console.log(props.ws)}} />
+        <Popover2 content={EmitEventPopover}>
+          <Button text='Emit Event' />
+        </Popover2>
+      </div>
+    </div>
+      
+      
+        
+        
+        
+      
+    
+  )
+
+}
+
 
 const SingleSocketPanel = props => {
 
@@ -122,6 +184,9 @@ const SingleSocketPanel = props => {
         title='Listeners'
         dict={ws_dict.callbacks}
         headers={['callback','definition']}
+      />
+      <SocketControls 
+        ws={props.ws}
       />
     </Card>
   )
