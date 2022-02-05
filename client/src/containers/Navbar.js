@@ -12,8 +12,8 @@ const MyNavbar = props => {
             <Navbar.Heading>Suhel's Website</Navbar.Heading>
             <Navbar.Divider />
             <Button className="bp3-minimal" icon="home" text="Home" onClick={() => { navigate('/')} }/>
-            <Button className="bp3-minimal" text="Messages" onClick={() => { navigate('/messages')}}/>
             <Button className="bp3-minimal" text="Estimate" onClick={() => { navigate('/estimate')}}/>
+            <Button className="bp3-minimal" text="Estimate Debug" onClick={() => { navigate('/estimate_debug')}}/>
             <Button className="bp3-minimal" text="Debug" onClick={() => { navigate('/debug')}}/>
             <Button className="bp3-minimal" text="Inspect Sockets" onClick={() => { navigate('/inspect_sockets')}}/>
         </Navbar.Group>

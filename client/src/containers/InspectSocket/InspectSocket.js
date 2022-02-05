@@ -3,17 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FormGroup, Card, Elevation, InputGroup, Button, Tab, Tabs, Text } from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/popover2" 
 import CodeEditor from '@uiw/react-textarea-code-editor';
-import styles from './inspectSockets.module.css'
-import { addSocket, removeSocket } from "../../store/actions/sockets"
+import styles from './InspectSocket.module.css'
 
+import {ws_actions} from '../../services/socket/middleware'
 
-const LayoutContainer = props => {
-  return (
-    <div className={styles.main}>
-      {props.children}
-    </div>
-  )
-}
+// Code for testing the "emit" functionality
+// echo_action: {"type":"LOAD_DEBUG","debug_obj";"yo check this"}
 
 
 const TableRow = props => {
@@ -24,10 +19,12 @@ const TableRow = props => {
 }
 
 const DictToTable = props => {
-
-  const bodyRows = Object.entries(props.dict).map( 
-    ([k,v]) => <TableRow key={k} k={k} v={v}/>
-  )
+  let bodyRows = null
+  if (Object.keys(props.dict).length > 0 ) {
+    bodyRows = Object.entries(props.dict).map( 
+      ([k,v]) => <TableRow key={k} k={k} v={v}/>
+    )
+  }
   
   return (
     <div>
@@ -48,22 +45,19 @@ const DictToTable = props => {
 }
 
 
-
-
 const AddSocketPanel = props => {
     
-    const [socketName, setSocketName] = useState("default_socket");
+    const [socketName, setSocketName] = useState("defaultSocket");
     const [host, setHost] = useState("ws://localhost:5000");
-    const [path, setPath] = useState("");
     
     const dispatch = useDispatch()
 
     const onChangeHost = (e) => {
       setHost(e.target.value)
     }
-
+    
     const onSubmit = () => {
-      dispatch(addSocket(host, path, socketName))
+      dispatch(ws_actions(socketName).connect(host))
     }
  
     return (
@@ -74,9 +68,6 @@ const AddSocketPanel = props => {
           </FormGroup>
           <FormGroup label="URL" labelFor="url-input" labelInfo="(required)" inline={true}>
               <InputGroup id="url-input" value={host} onChange={onChangeHost}/>
-          </FormGroup>
-          <FormGroup label="Path" labelFor="path-input" labelInfo="(required)" inline={true}>
-              <InputGroup id="path-input" value={path} onChange={(e)=>{setPath(e.target.value)}}/>
           </FormGroup>
           <Button 
             text="Add Socket"
@@ -93,8 +84,12 @@ const SocketControls = props => {
   const [eventName, setEventName] = useState("")
   const [code, setCode] = useState("")
 
+  const emit = ws_actions(props.socketName).emit
+  const removeSocket = () => {
+    dispatch( ws_actions(props.socketName).remove() )
+  }
   const emitToBackend = () => {
-    props.ws.functions.emit_json(eventName, code)
+    dispatch( emit(eventName, JSON.parse(code) ) )
   }
 
   const EmitEventPopover = (
@@ -110,7 +105,7 @@ const SocketControls = props => {
         <CodeEditor
           value={code}
           language="js"
-          placeholder="Event Payload (in javascript)"
+          placeholder="JSON Payload"
           onChange={(e) => setCode(e.target.value)}
           padding={15}
           style={{
@@ -128,20 +123,13 @@ const SocketControls = props => {
     <div>
       <h5>{'Button Controls'}</h5>
       <div className={styles.hflex_container}>
-        <Button text='Remove Socket' onClick={()=>{dispatch(removeSocket(props.ws.name))}}/>
-        <Button text='Log Socket' onClick={()=>{console.log(props.ws)}} />
+        <Button text='Remove Socket' onClick={removeSocket}/>
+        <Button text='Log Socket' onClick={()=>{console.log('implement later')}} />
         <Popover2 content={EmitEventPopover}>
           <Button text='Emit Event' />
         </Popover2>
       </div>
-    </div>
-      
-      
-        
-        
-        
-      
-    
+    </div> 
   )
 
 }
@@ -149,24 +137,28 @@ const SocketControls = props => {
 
 const SingleSocketPanel = props => {
 
-  const get_socket_info = (ws) => {
-    return {
-      'info':{
-        'name':ws.name,
-        'socketId':ws.socket.id,
-        'connected':ws.socket.connected.toString(),
-        'uri':ws.socket.io.uri,
-      },
-      'functions': Object.fromEntries(
-        Object.entries(ws.functions).map( ([k,v]) => [k,v.toString()])
-      ),
-      'callbacks':Object.fromEntries(
-        Object.entries(ws.socket._callbacks).map( ([k,v]) => [k,v.toString()])
-      )
-    }
+  const socketInfo = useSelector( state => state.sockets[props.socketName])
+
+  const noSocketInfoYet = {
+    info : { name: '...', socketId:'...', connected:'Not yet', uri:'...'}, callbacks:{} 
   }
 
-  const ws_dict = get_socket_info(props.ws)
+  const transformSocketInfo = (socketInfo) => {
+    if (socketInfo == null) {
+      return noSocketInfoYet
+    } else {
+      return {
+        info : {
+          name : socketInfo.name,
+          socketId : socketInfo.socketId,
+          connected : socketInfo.connected,
+          uri : socketInfo.uri
+        },
+        callbacks : socketInfo.callbacks
+      }
+    }
+  }
+  const ws_dict = transformSocketInfo( socketInfo )
 
   return (
     <Card>
@@ -176,30 +168,25 @@ const SingleSocketPanel = props => {
         headers={['field','value']}
       />
       <DictToTable 
-        title='Outbound Functions'
-        dict={ws_dict.functions}
-        headers={['function','definition']}
-      />
-      <DictToTable 
         title='Listeners'
         dict={ws_dict.callbacks}
         headers={['callback','definition']}
       />
       <SocketControls 
-        ws={props.ws}
+        socketName={props.socketName}
       />
     </Card>
   )
-
 }
 
 const ExploreSocketPanel = () => {
 
-  const sockets = useSelector( state => state.sockets )
+  const sockets = useSelector( state => Object.keys( state.sockets ) )
 
-  const socketTabElements = Object.entries(sockets).map(([k,v]) => (
-    <Tab key={k} id={k} title={k} panel={<SingleSocketPanel ws={v}/>} />
-  ))
+  const socketTabElements = sockets.map( k => (
+    <Tab key={k} id={k} title={k} panel={<SingleSocketPanel socketName={k}/>} />
+    )
+  )
 
   const [selectedTab, setSelectedTab] = useState('addSocket')
   const onTabChange = (newTabId) => { setSelectedTab(newTabId) }
@@ -217,14 +204,14 @@ const ExploreSocketPanel = () => {
 }
 
 
-const InspectSockets = props => {
+const InspectSocket = props => {
 
   return (
-    <LayoutContainer>
+    <div className={styles.main}>
       <div style={{marginBottom: "50px"}}></div>
       {<ExploreSocketPanel/>}
-    </LayoutContainer>
+    </div>
   )
 }
 
-export default InspectSockets;
+export default InspectSocket;

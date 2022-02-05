@@ -1,14 +1,16 @@
 import { combineReducers } from "redux";
 import errors from "./errors";
-import messages from "./messages";
 import debug from "./debug";
-import sockets from "./sockets";
+import estimate from '../../containers/Estimate/redux'
+//import inspectSocket from '../../containers/InspectSocket/redux'
+import sockets from '../../services/socket/redux'
+
 
 const rootReducer = combineReducers({
   errors,
-  messages,
   debug,
-  sockets,
+  estimate,
+  sockets
 });
 
 export default rootReducer;

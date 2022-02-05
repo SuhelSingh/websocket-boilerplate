@@ -1,3 +1,4 @@
+
 .main {
     width: 100%;
     height: 100%;  
@@ -6,15 +7,18 @@
     align-content: center;
     justify-content: flex-center;
     align-items: center;
+    row-gap: 10px;
 } 
 
-.divider_div {
-    height: 5vh
+.main_content_container {
+    min-width: 500px;
+    max-width: 80vw;
 }
 
 .card {
-    width: 50%;
-    max-width: 650px;
+    width: 100%;
+    min-width: 500px;
+    min-height: 250px;
     /* min-height: 250px; */
 
     display: flex;
@@ -31,22 +35,12 @@
     margin-bottom: 0px;
 }
 
-.body {
-    width: 100%;
-    flex-grow: 1;
-    margin-top: 10px;
-    margin-bottom: 10px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.message {
+  font-weight: normal;
 }
 
-
-
-.typography_style {
-    font-size: 24px !important;
-
+.prompt {
+  font-weight: normal;
 }
 
 .no_margin_divider {
@@ -69,7 +63,17 @@
     flex-direction: column;
     align-content: flex-start;
     justify-content: flex-start;
-    align-items: right;
+    align-items: flex-start;
     gap: 15px;
+} 
+
+.vflex_container2 {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: right;
+    gap: 0px;
+    flex-grow:0;
 } 
 
