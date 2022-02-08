@@ -23,7 +23,7 @@ services:
     ports:
       - "8888:8888" # for developing in jupyterlab
       - "5000:5000" # for accessing the server
-    volumes: 
+    volumes:
       - ./server:/server
-
     entrypoint: jupyter lab --allow-root --port=8888 --ServerApp.token=kebob --notebook-dir="/server"
+

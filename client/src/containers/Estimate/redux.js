@@ -1,28 +1,34 @@
 import {ws_actions} from '../../services/socket/middleware'
-
+import { AppToaster } from '../../services/Toaster';
 
 // Action Types
 // ------------
-export const UPDATE_STATE = 'ESTIMATE.UPDATE_STATE';
+export const UPDATE_MODULE_STATE = 'ESTIMATE._UPDATE_STATE';
 
-export const UPDATE_PROMPT = "ESTIMATE.UPDATE_PROMPT";
-export const UPDATE_MESSAGE = "ESTIMATE.UPDATE_MESSAGE";
-export const UPDATE_INPUT = "ESTIMATE.UPDATE_INPUT";
-export const UPDATE_PROMPT_STATUS = "ESTIMATE.UPDATE_PROMPT_STATUS";
-export const UPDATE_MODE = "ESTIMATE.CHANGE_MODE";
-export const UPDATE_TIMER = "ESTIMATE.UPDATE_TIMER";
-export const START_TIMER = "ESTIMATE.START_TIMER"
 
-// Actions
+// Building Block Actions
 // -------
-export const ws = ws_actions('estimate')
+const ws = ws_actions('estimate')
+const updateModuleState = (newState) => ({type:UPDATE_MODULE_STATE,newState:newState})
+export const toast = {
+  success: (toast) => { AppToaster.show({message:toast,intent:'success'}); console.log(AppToaster)},
+  failure: (toast) => { AppToaster.show({message:toast,intent:'danger'}); console.log(AppToaster)},
+  message: (toast) => { AppToaster.show({message:toast,intent:'primary'}); console.log(AppToaster)},
+}
+export const actions = {
+  ws,
+  updateModuleState,
+  toast,
+}
 
-export const updateState = (newState) => ({type:''})
-export const connectSocket = () => { ws.connect() }
-export const startSession = (user,tag) => { ws.emit('estimate__start_session', {user, tag}) }
-export const changeMode = (newMode) => ({ type:UPDATE_MODE, newMode }) // start, answer, review, pause, load
+export const hotKeyGen = (combo, label=null, action=null) => {
+  let _label = (label==null) ? combo : label
+  let _action = (action==null) ? () => {console.log(`hotkey: ${label}`)} : action 
+  return {
+    combo:combo, global: true, allowInInput:true, label:_label, onKeyDown:_action, 
+  }
+}
 
-export const requestPrompt = () => { ws.emit('estimate__request_prompt',{}) }
 // export const setPrompt = (prompt) => {}
 // Starting a session
     // Enter username
@@ -60,28 +66,18 @@ export const requestPrompt = () => { ws.emit('estimate__request_prompt',{}) }
 
 //// REDUCER
 const initialState = {
-    n1: 0,
-    n2: 0,
-    promptText: '...Loading',
     messageText: 'Waiting for prompt to load',
+    review: null,
     inputValue: '...',
-    promptStatus: 'normal',
-    gameMode: 'paused'
+    prompt: { text:'', n1:null, n2:null},
+    displayedTabId: 'start-session',
+    sessionId: null
 }
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_STATE:
+    case UPDATE_MODULE_STATE:
       return { ...state, ...action.newState };
-    case UPDATE_PROMPT:
-      return { ...state, promptStatus: action.newValue };
-    case UPDATE_MESSAGE:
-      return { ...state, messageText: action.newValue };
-    case UPDATE_INPUT:
-      return { ...state, inputValue: action.newValue };
-    case UPDATE_PROMPT_STATUS:
-      return { ...state, promptStatus: action.newValue };
-    case UPDATE_MODE:
-      return { ...state, gameMode: action.newValue };
     default:
       return state;
   }

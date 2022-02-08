@@ -6,6 +6,9 @@ from flask import Flask, render_template
 from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO, send, emit
 
+from estimate import funcs as estimate_funcs
+#from estimate import EstimateNamespace
+
 app = Flask(__name__)
 CORS(app)
 #app.config['SECRET_KEY'] = 'kebob'
@@ -61,6 +64,18 @@ def handle_connect(payload=None):
 def handle_disconnect(payload=None):
     print('disconnected: ' + str(payload))
 
+def register_namespace(namespace, funcs):
+    for func in funcs:
+        socketio.on_event(func.__name__, func, namespace=namespace)
+
+register_namespace('/estimate',estimate_funcs)
+        
+@socketio.on('test_session',namespace='/estimate')
+def handle_test_session(data):
+    print(data)
+    return ('yoyoyo','hey you dirtly little bitch')
+    
+#socketio.on_namespace(EstimateNamespace('/estimate'))
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0',port=5000,debug=True)

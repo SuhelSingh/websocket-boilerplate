@@ -8,7 +8,7 @@ import styles from './InspectSocket.module.css'
 import {ws_actions} from '../../services/socket/middleware'
 
 // Code for testing the "emit" functionality
-// echo_action: {"type":"LOAD_DEBUG","debug_obj";"yo check this"}
+// echo_action: {"type":"LOAD_DEBUG","debug_obj":"yo check this"}
 
 
 const TableRow = props => {

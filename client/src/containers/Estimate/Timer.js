@@ -68,6 +68,7 @@ export const CountdownTimer = React.forwardRef( (props,ref) => {
       pauseTimer : () => {setIsPaused(1)},
       startTimer : () => {setIsPaused(0)},
       resetTimer : () => {setElapsedTime(0.0)},
+      getElapsedTime : () => (elapsedTime)
     })
   )
 

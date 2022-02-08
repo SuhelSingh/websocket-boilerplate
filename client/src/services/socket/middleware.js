@@ -24,15 +24,17 @@ export const ws_actions = (socketName='defaultSocket') => {
 
   const remove = () => ({type: 'SOCKET.REMOVE',socketName})
 
-  const emit = (eventName, payload) => ({
+  const emit = (eventName, payload, ack=null) => ({
     type: 'SOCKET.EMIT',
     eventName,
     payload,
+    ack,
     socketName,
   })
-  const send = (payload) => ({
+  const send = (payload, ack=null) => ({
     type: 'SOCKET.SEND',
     payload,
+    ack,
     socketName,
   })
 
@@ -149,13 +151,14 @@ const socketMiddleware = () => {
           store.dispatch(ws_actions(action.socketName).updateState())
           break;
         case 'EMIT':
+          console.log([action.eventName, JSON.stringify(action.payload), action.ack])
           socket.emit(
-            action.eventName, JSON.stringify(action.payload)
+            action.eventName, JSON.stringify(action.payload), action.ack
           )
           break;
         case 'SEND':
           socket.send(
-            JSON.stringify(action.payload)
+            JSON.stringify(action.payload), action.ack
           )
           break;
         default:

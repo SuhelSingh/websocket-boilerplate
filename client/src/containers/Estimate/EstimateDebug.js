@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import styles from './Estimate.module.css'
 
 import AnswerPrompt from './AnswerPrompt'
@@ -9,32 +8,31 @@ import PauseMenu from './PauseMenu'
 import TestTimer from './TestTimer'
 import TestCountdown from './TestCountdown'
 
-import { HotkeysProvider, Tab, Tabs } from "@blueprintjs/core";
+import { HotkeysProvider } from "@blueprintjs/core";
 
-const EstimateDebug = props => {
+const Estimate = props => {
 
   return (
     <HotkeysProvider>
       <div className={styles.main}>
-      <div style={{marginBottom: "50px"}}></div>
-        <Tabs id="EstimateTabs" defaultSelectedTabId="start-session" className={styles.main_content_container} vertical={true}>
-            <Tab id="start-session" title="Start Session" panel={<StartSession/>}/>   
-            <Tab id="answer-prompt" title="Answer Prompt" panel={<AnswerPrompt/>} />
-            <Tab id="review-answer" title="Review Answer" panel={<ReviewAnswer />} />
-            <Tab id="test-countdown" title="Test Countdown" panel={<TestCountdown />} />
-            <Tab id="test-timer" title="Test Timer" panel={<TestTimer />} />
-            <Tab id="pause-menu" title="Pause Menu" panel={<PauseMenu />} />
-            <Tabs.Expander />
-        </Tabs>
+        <div style={{marginBottom: "50px"}}></div>
+        <div className={styles.main_content_container}>
+          <AnswerPrompt/>
+          <div style={{marginBottom: "50px"}}></div>
+          <StartSession/>
+          <div style={{marginBottom: "50px"}}></div>
+          <ReviewAnswer/>
+          <div style={{marginBottom: "50px"}}></div>
+          <PauseMenu/>
+          <div style={{marginBottom: "50px"}}></div>
+          <TestCountdown/>
+          <div style={{marginBottom: "50px"}}></div>
+          <TestTimer/>
+          <div style={{marginBottom: "50px"}}></div>
+        </div>
       </div>
     </HotkeysProvider>
   )
 }
 
-function mapStateToProps(state) {
-  return {
-    estimate: state.estimate
-  };
-}
-
-export default connect(mapStateToProps)(EstimateDebug);
+export default Estimate;

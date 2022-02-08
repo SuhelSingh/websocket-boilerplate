@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import { AppToaster } from "../Toaster";
 
 const defaultConfig = { 
   path: '',
@@ -19,11 +20,15 @@ const createDefaultSocket = (host='ws://localhost:5000', socketConfig = defaultC
 
   // Add event listeners
   socket.on("connect", () => {
-    console.log(`Connected: ${socket.id}`)
+    AppToaster.show({message:`hey yo, the socket has connected: ${socket.id}`, intent:'success'})
+  });
+
+  socket.on("disconnect", () => {
+    AppToaster.show({message:`FUCK. The socket disconnected: ${socket.id}`, intent:'warning'})
   });
 
   socket.on("send_action", (msg) => {
-    const payload = JSON.parse(msg);
+    const payload = (typeof msg === 'string' ) ? JSON.parse(msg) : msg
     store.dispatch(payload)
   });
 

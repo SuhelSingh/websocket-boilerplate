@@ -20,3 +20,10 @@ def random_string(n=10):
         np.random.choice(list(options),n)
     )
     return rnd_str 
+
+
+
+
+
+
+
