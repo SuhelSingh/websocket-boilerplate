@@ -151,14 +151,14 @@ const socketMiddleware = () => {
           store.dispatch(ws_actions(action.socketName).updateState())
           break;
         case 'EMIT':
-          console.log([action.eventName, JSON.stringify(action.payload), action.ack])
+          console.log([action.eventName, action.payload, action.ack])
           socket.emit(
-            action.eventName, JSON.stringify(action.payload), action.ack
+            action.eventName, action.payload, action.ack
           )
           break;
         case 'SEND':
           socket.send(
-            JSON.stringify(action.payload), action.ack
+            action.payload, action.ack
           )
           break;
         default:

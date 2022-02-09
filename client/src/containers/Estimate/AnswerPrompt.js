@@ -10,6 +10,7 @@ import { Timer } from "./Timer";
 export default props => {
 
   const prompt = useSelector(state=>state.estimate.prompt)
+  const sessionId = useSelector(state=>state.estimate.sessionId)
   const dispatch = useDispatch()
 
   const [inputValue, setInputValue] = useState('')
@@ -31,7 +32,7 @@ export default props => {
   const updatePromptCallback = ({n1,n2}) => { dispatch(actions.updateModuleState({prompt:{n1,n2}})) }
   const startPrompt = () => {
     clearPrompt();
-    dispatch( actions.ws.emit('fetch_prompt',{},updatePromptCallback) )
+    dispatch( actions.ws.emit('fetch_prompt',{sessionId},updatePromptCallback) )
   }
   useEffect(startPrompt, [])
 
@@ -41,7 +42,8 @@ export default props => {
       const payload = { 
         answer : inputValue,
         elapsedTime : timerRef.current.getElapsedTime(),
-        prompt: prompt
+        prompt: prompt,
+        sessionId: sessionId
       }
       const submitAnserCallback = (newState)=>{
         console.log('submit answer callback: ', newState)

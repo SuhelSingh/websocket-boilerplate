@@ -6,6 +6,9 @@ from flask import Flask, render_template
 from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO, send, emit
 
+from db.database import db_session
+
+
 from estimate import funcs as estimate_funcs
 #from estimate import EstimateNamespace
 
@@ -16,6 +19,11 @@ socketio = SocketIO(app,
     #engineio_logger=True, 
     #logger=True, 
     cors_allowed_origins='*')
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 @app.route("/")

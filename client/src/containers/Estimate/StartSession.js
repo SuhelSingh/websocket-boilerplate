@@ -30,10 +30,11 @@ export default props => {
 
     const dispatch = useDispatch()
 
-    const startSessionCallback = ({sessionId}) => {
-      if (sessionId !== null) {
-        actions.toast.success('Started Session: ',sessionId)
-        dispatch(actions.updateModuleState({sessionId,displayedTabId:'answer-prompt'}))
+    const startSessionCallback = (res) => {
+      console.log(res)
+      if (res !== null) {
+        actions.toast.success(`Started Session: ${res}`)
+        dispatch(actions.updateModuleState({sessionId:res,displayedTabId:'answer-prompt'}))
       } else {
         actions.toast.failure('FUUUUUCK, couldnt get a god damn session id ')
       }
